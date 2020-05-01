@@ -33,6 +33,28 @@ m = folium.Map(
     tiles=tile,
     attr='Mapbox')
 
+
+# create tooltips for blog articles
+# blog_len = len(blog_dict)
+# for i in (list(range(1, blog_len))):
+#
+# folium.Marker(
+#     coordinates_dict[i],
+#     # folium.Popup("""<a href=" ['https://www.google.de/] "target="_blank"> [Quito Post]' </a>"""),
+#     tooltip=tooltip_dict[i]).add_to(m)
+
+# circles for stays
+coord_len = len(coordinates_dict)
+for i in (list(range(1, coord_len))):
+
+    folium.CircleMarker(
+        radius=4,
+        location=coordinates_dict[i],
+        popup=tooltip_dict[i],
+        color='crimson',
+        fill=True,
+    ).add_to(m)
+
 # iterate over coordinate splits (maximum of 6000km is processed by ors)
 for s in split_tuples:
     selected_keys = list(s)
@@ -63,16 +85,19 @@ for s in split_tuples:
                             style_function=style_route('#FF0000'),
                             overlay=True).add_to(m)
 
-# paint circles loop
-coord_len = len(coordinates_dict)
-for i in (list(range(1, coord_len))):
 
-    folium.CircleMarker(
-        radius=3,
-        location=coordinates_dict[i],
-        popup=tooltip_dict[i],
-        color='crimson',
-        fill=True,
-    ).add_to(m)
+# paint circles loop
+# coord_len = len(coordinates_dict)
+# for i in (list(range(1, coord_len))):
+#
+#     folium.CircleMarker(
+#         radius=4,
+#         location=coordinates_dict[i],
+#         popup=tooltip_dict[i],
+#         color='crimson',
+#         fill=True,
+#     ).add_to(m)
+
+
 
 m.save('newtest.html')
