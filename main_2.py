@@ -1,7 +1,8 @@
 import folium
 from openrouteservice import client
 
-from route_params import names_dict, tooltip_dict, coordinates_dict
+from route_params import (tooltip_dict, coordinates_dict, blog_list,
+    blog_links, blog_names)
 
 DEFAULT_LOC = [-4.103753, -81.044672]
 api_key = '5b3ce3597851110001cf6248b560c2165259434bb980d7e91b7fdcab'
@@ -34,15 +35,6 @@ m = folium.Map(
     attr='Mapbox')
 
 
-# create tooltips for blog articles
-# blog_len = len(blog_dict)
-# for i in (list(range(1, blog_len))):
-#
-# folium.Marker(
-#     coordinates_dict[i],
-#     # folium.Popup("""<a href=" ['https://www.google.de/] "target="_blank"> [Quito Post]' </a>"""),
-#     tooltip=tooltip_dict[i]).add_to(m)
-
 # circles for stays
 coord_len = len(coordinates_dict)
 for i in (list(range(1, coord_len))):
@@ -54,6 +46,18 @@ for i in (list(range(1, coord_len))):
         color='crimson',
         fill=True,
     ).add_to(m)
+
+
+# create markers and links to log articles.
+# coordinates has to be selected by blog_list entry (the coordinate), whilst
+# blog_names and links are only lists of the blog articles.
+for n, b in enumerate(blog_list):
+    marker_name = "Artikel " + tooltip_dict[b]
+    folium.Marker(
+        coordinates_dict[b],
+        folium.Popup(f"""<a href="{blog_links[n]} "target="_blank"> {blog_names[n]} </a>"""),
+        tooltip=blog_names[n]).add_to(m)
+
 
 # iterate over coordinate splits (maximum of 6000km is processed by ors)
 for s in split_tuples:
@@ -84,20 +88,5 @@ for s in split_tuples:
                             name='Route',
                             style_function=style_route('#FF0000'),
                             overlay=True).add_to(m)
-
-
-# paint circles loop
-# coord_len = len(coordinates_dict)
-# for i in (list(range(1, coord_len))):
-#
-#     folium.CircleMarker(
-#         radius=4,
-#         location=coordinates_dict[i],
-#         popup=tooltip_dict[i],
-#         color='crimson',
-#         fill=True,
-#     ).add_to(m)
-
-
 
 m.save('newtest.html')
